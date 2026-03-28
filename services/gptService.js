@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const MODEL_NAME = process.env.Model_Name;
 const previewInstructions = `
 **Objective:** Process Quran memorization plan parameters (input as JSON) and **your entire response must be a single, valid JSON string** containing calculation details, estimated completion date, and a CSV preview of the first cycle. Do not output any other text, explanations, or code.
 
@@ -114,8 +115,6 @@ const fullPlanInstructions = `
 **User Input:**
 `;
 
-
-
 function cleanupResponse(raw) {
     try {
         let cleaned = raw
@@ -142,39 +141,40 @@ function cleanupResponse(raw) {
     }
 }
 
-
-
 const gptService = {
     getPreviewPlan: async (userInput) => {
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.0-flash-lite', config: {
+            model: MODEL_NAME,
+            config: {
                 thinkingConfig: {
-                    // includeThoughts: false,
-                    thinkingBudget: 0
-                }
-            }
+                    thinkingBudget: 0,
+                },
+            },
         });
+
         const prompt = previewInstructions + userInput;
         const result = await model.generateContent(prompt);
         const response = result.response;
         const cleanResponse = cleanupResponse(response.text());
         return cleanResponse;
     },
+
     getFullPlan: async (userInput) => {
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.0-flash-lite', config: {
+            model: MODEL_NAME,
+            config: {
                 thinkingConfig: {
-                    // includeThoughts: false,
-                    thinkingBudget: 0
-                }
-            }
+                    thinkingBudget: 0,
+                },
+            },
         });
+
         const prompt = fullPlanInstructions + userInput;
         const result = await model.generateContent(prompt);
         const response = result.response;
         const cleanResponse = cleanupResponse(response.text());
         return cleanResponse;
-    }
+    },
 };
 
 export default gptService;
