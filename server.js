@@ -35,9 +35,4 @@ cron.schedule(DAILY_REMINDER_CRON, () => {
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
-
-    // TEMP TEST: Send today's reminder once on app startup.
-    const today = getGermanyTodayDate();
-    console.log(`TEMP TEST: Sending immediate reminder for ${today}...`);
-    emailService.sendReminders(today);
 });
