@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const MODEL_NAME = process.env.Model_Name || 'gemini-3.1-flash-lite-preview';
+const MODEL_NAME = process.env.Model_Name || 'gemini-2.5-flash-lite';
 const previewInstructions = `
 **Objective:** Process Quran memorization plan parameters (input as JSON) and **your entire response must be a single, valid JSON string** containing calculation details, estimated completion date, and a CSV preview of the first cycle. Do not output any other text, explanations, or code.
 
